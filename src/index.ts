@@ -16,14 +16,13 @@ const tipAmountElem = document.getElementById('tip-amount') as HTMLSpanElement;
 const totalAmountElem = document.getElementById('total-amount') as HTMLSpanElement;
 
 document.getElementById('button-20-pct').setAttribute('disabled', 'disabled');
-const billAmount = 0.0;
+const billReset = 0.0;
 let tipPercent = 20;
 let previousAmountText = '0.00';
-updateAll(billAmount, tipPercent);
+updateAll(billReset, tipPercent);
 
 // 1.1 Update all fields
 function updateAll(bill: number, tipPct: number) {
-    // billAmount = parseFloat(previousAmountText);
     const tip = bill * tipPct / 100.0;
     const total = bill + tip;
 
@@ -39,20 +38,25 @@ billEnteredElem.addEventListener('keyup', handleKeyUp);
 buttonGroup.forEach(btn => btn.addEventListener('click', handleClick));
 
 function handleKeyUp() {
-    let amount = billEnteredElem.value;
-    console.log(`${amount}`);
-    if (amount.match(/^[+-]{0,1}[0-9]*[.]{0,1}[0-9]{0,2}$/) !== null) {
-        if (amount.match(/^-/) !== null) {
-            billEnteredElem.classList.add('redBorder');
-            amount = '0.0';
+    const amountText = billEnteredElem.value;
+    console.log(`${amountText}`);
+    if (amountText.match(/^[+-]{0,1}[0-9]{1,}[.]{0,1}[0-9]{0,2}$/) !== null) {
+        // accept input, like "+100.20"
+        if (amountText.match(/^-/) !== null) {
+            billEnteredElem.classList.add('red-border');
+            // previousAmountText = amountText;
+            updateAll(billReset, tipPercent);
+            document.getElementById('leading-dollar').focus();
         } else {
-            billEnteredElem.classList.remove('redBorder');
+            billEnteredElem.classList.remove('red-border');
+            previousAmountText = amountText;
+            updateAll(parseFloat(previousAmountText), tipPercent);
         }
-        previousAmountText = amount;
     } else {
+        // reject last input character, like "100.003", "100.0a"
         billEnteredElem.value = previousAmountText;
+        updateAll(parseFloat(previousAmountText), tipPercent);
     }
-    updateAll(parseFloat(previousAmountText), tipPercent);
 }
 
 function handleClick() {
@@ -67,7 +71,6 @@ function handleClick() {
             document.getElementById(`${btn.id}`).removeAttribute('disabled');
         }
     });
-    tipPercentageElem.innerText = tipPercent.toString();
     updateAll(parseFloat(previousAmountText), tipPercent);
 }
 

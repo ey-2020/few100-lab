@@ -1,8 +1,9 @@
 h1 {
     color:#223388;
 }
-.redBorder {
-    border: "5px solid red";
-    background-color: brown;
-    color: red;
+.red-border {
+    border-color: red;
+    border: 2px solid red;
+    background-color: rgb(139, 103, 103);
+    color: #44aacc;
 }
