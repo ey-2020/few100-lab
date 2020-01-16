@@ -3,16 +3,60 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
     <title>Front End Web 100</title>
 </head>
 
 <body>
-    <header>
-        <h1>Front End Web 100 Starter</h1>
-        <h2>Progressive ITU</h2>
-    </header>
+    <div class="container-fluid">
+        <header class="jumbotron">
+            <h1>Tip Calculator</h1>
+            <h2>FEW 100 - Lab</h2>
+        </header>
+    </div>
     <main>
-        
+        <div class="input-group mb-3 w-75 ml-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text"
+                      id="basic-addon1">$</span>
+            </div>
+            <input type="text"
+                   class="form-control"
+                   id="bill-entered"
+                   placeholder="0.00">
+        </div>
+        <div class="btn-group mb-3 ml-3">
+            <div class="btn-group">
+                <button class="btn btn-secondary"
+                        id="button-10-pct"
+                        type="button">10%</button>
+                <button class="btn btn-secondary"
+                        id="button-15-pct"
+                        type="button">15%</button>
+                <button class="btn btn-secondary"
+                        id="button-20-pct"
+                        type="button">20%</button>
+            </div>
+        </div>
+        <div class="ml-3">
+            <table class="table-bordered w-75">
+                <tr>
+                    <td class="pl-2">Bill Amount: $<span id="bill-amount"></span></td>
+                </tr>
+                <tr>
+                    <td class="pl-2">Tip Percentage: <span id="tip-percentage"></span>%</td>
+                </tr>
+                <tr>
+                    <td class="pl-2">Amount of tip: $<span id="tip-amount"></span></td>
+                </tr>
+                <tr>
+                    <td class="pl-2">Total to be Paid: $<span id="total-amount"></span></td>
+                </tr>
+            </table>
+        </div>
     </main>
 </body>
 
