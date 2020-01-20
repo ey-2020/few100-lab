@@ -29,60 +29,63 @@ class Invoice {
         this.billText = billText;
         this.bill = bill;
         this.tipRate = tipRate;
+        this.personsText = personsCount.toString();
         this.personsCount = personsCount;
     }
 }
 const defaultText = '';
 const defaultAmount = 0.0;
 const defaultRate = 20;
-const defaultCount = 1;
-let invoice = new Invoice(defaultText, defaultAmount, defaultRate, defaultCount);
-updateTipSelection('button-' + defaultRate.toString() + '-pct');
+const defaultHeadCount = 1;
+let invoice = new Invoice(defaultText, defaultAmount, defaultRate, defaultHeadCount);
+const defaultRateId = 'button-' + defaultRate.toString() + '-pct';
+updateTipSelection(defaultRateId);
 updateAmountDisplay(invoice);
 updateSplitAmountDisplay(invoice);
 
 // 2) Update invoice states
 // 2.1) Update tip rate
-function updateTipRate(tipRate: number, currentInvoice: Invoice) {
-    currentInvoice.tipRate = tipRate;
-    return currentInvoice;
+function updateTipRate(tipRate: number, current: Invoice): Invoice {
+    const newInvoice = new Invoice(current.billText, current.bill, tipRate, current.personsCount);
+    return newInvoice;
 }
 
 // 2.2) Update invoice amount
-function updateAmount(textEntered: string, currentInvoice: Invoice): Invoice {
-    if (textEntered.match(/^[+-]{0,1}[0-9]{1,}[.]{0,1}[0-9]{0,2}$/) !==
-        null) {
+function updateAmount(textEntered: string, current: Invoice): Invoice {
+    let newInvoice: Invoice = null;
+    if (textEntered.match(/^[+-]{0,1}[0-9]{1,}[.]{0,1}[0-9]{0,2}$/) !== null) {
         // accept input, like "+100.20"|"-100.20"
-        currentInvoice.billText = textEntered;
-        currentInvoice.bill = parseFloat(invoice.billText);
+        newInvoice = new Invoice(textEntered, parseFloat(textEntered), current.tipRate, current.personsCount);
     } else if (textEntered.match(/^[+-]{1}$/)) {
         // initial blank field or later reset
-        currentInvoice.billText = textEntered;
-        currentInvoice.bill = 0.0;
+        newInvoice = new Invoice(textEntered, 0.0, current.tipRate, current.personsCount);
+        // currentInvoice.billText = textEntered;
+        // currentInvoice.bill = 0.0;
     } else if (textEntered.match(/^$/)) {
         // initial blank field or later reset
-        currentInvoice.billText = '';
-        currentInvoice.bill = 0.0;
+        newInvoice = new Invoice('', 0.0, current.tipRate, current.personsCount);
     } else {
         // reject last input character, like in "100.."|"100.003"|"100.0a"
+        newInvoice = new Invoice(current.billText, current.bill, current.tipRate, current.personsCount);
     }
-    return currentInvoice;
+    return newInvoice;
 }
 
 // 2.3) Update persons to split the bill
-function updatePersons(textEntered: string, currentInvoice: Invoice): Invoice {
+function updatePersons(textEntered: string, current: Invoice): Invoice {
+    let newInvoice: Invoice = null;
     if (textEntered.match(/^[1-9]{1}[0-9]{0,}$/) !== null) {
         // accept input, like "10"
-        currentInvoice.personsText = textEntered;
-        currentInvoice.personsCount = parseInt(currentInvoice.personsText, 10);
+        newInvoice = new Invoice(current.billText, current.bill, current.tipRate, parseInt(textEntered, 10));
     } else if (textEntered.match(/^$/)) {
         // initial blank field or later reset
-        currentInvoice.personsText = textEntered;
-        currentInvoice.personsCount = 1;
+        newInvoice = new Invoice(current.billText, current.bill, current.tipRate, 1);
+        newInvoice.personsText = '';
     } else {
         // reject last input character, like in "0"|"+10"|"-10"|"1a"
+        newInvoice = new Invoice(current.billText, current.bill, current.tipRate, current.personsCount);
     }
-    return currentInvoice;
+    return newInvoice;
 }
 
 // 3. update displays
@@ -148,31 +151,38 @@ function updateSplitAmountDisplay(currentInvoice: Invoice) {
 
 // 4. Hook up events
 billEnteredElem.addEventListener('keyup', handleBillKeyUp);
-buttonGroup.forEach(btn => btn.addEventListener('click', handleClick));
+buttonGroup.forEach(btn => btn.addEventListener('click', handleTipRateClick));
 personsEnteredElem.addEventListener('keyup', handlePersonsKeyUp);
 
 function handleBillKeyUp() {
     const amountText = billEnteredElem.value;
+    // assign global invoice to new object, with updated bill amount
     invoice = updateAmount(amountText, invoice);
+    // update amount entered display
     refreshAmountEntered(invoice);
+    // update both total and split amounts
     updateAmountDisplay(invoice);
     updateSplitAmountDisplay(invoice);
 }
 
-function handleClick() {
+function handleTipRateClick() {
     const buttonId = this.id;
     const tipRate = parseInt(buttonId.replace('button-', '').replace('-pct', ''), 10);
-    // update tip rate
+    // assign global invoice to new object, with updated tip rate
     invoice = updateTipRate(tipRate, invoice);
     // update tip button display
     updateTipSelection(buttonId);
+    // update both total and split amounts
     updateAmountDisplay(invoice);
     updateSplitAmountDisplay(invoice);
 }
 
 function handlePersonsKeyUp() {
     const personsText = personsEnteredElem.value;
+    // assign global invoice to new object, with updated persons count
     invoice = updatePersons(personsText, invoice);
+    // update persons entered display
     refreshPersonsEntered(invoice);
+    // update split amount only
     updateSplitAmountDisplay(invoice);
 }
