@@ -137,8 +137,12 @@ function updateSplitAmountDisplay(currentInvoice: Invoice) {
     averageAmountElem.innerHTML = (total / currentInvoice.personsCount).toFixed(2);
     if (currentInvoice.personsCount > 1) {
         eachPayingElem.classList.add('darkred-text');
+        eachPayingElem.classList.remove('each-paying-hidden');
+        eachPayingElem.classList.add('each-paying-shown');
     } else {
         eachPayingElem.classList.remove('darkred-text');
+        eachPayingElem.classList.remove('each-paying-shown');
+        eachPayingElem.classList.add('each-paying-hidden');
     }
 }
 
