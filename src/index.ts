@@ -59,8 +59,6 @@ function updateAmount(textEntered: string, current: Invoice): Invoice {
     } else if (textEntered.match(/^[+-]{1}$/)) {
         // initial blank field or later reset
         newInvoice = new Invoice(textEntered, 0.0, current.tipRate, current.personsCount);
-        // currentInvoice.billText = textEntered;
-        // currentInvoice.bill = 0.0;
     } else if (textEntered.match(/^$/)) {
         // initial blank field or later reset
         newInvoice = new Invoice('', 0.0, current.tipRate, current.personsCount);
@@ -102,9 +100,9 @@ function updateTipSelection(buttonId: string) {
 }
 
 // 3.2 refresh amount input text
-function refreshAmountEntered(currentInvoice: Invoice) {
-    billEnteredElem.value = invoice.billText;
-    if (currentInvoice.billText.match(/^-/) !== null) {
+function refreshAmountEntered(current: Invoice) {
+    billEnteredElem.value = current.billText;
+    if (current.billText.match(/^-/) !== null) {
         billEnteredElem.classList.add('red-border');
         // have to set focus elsewhere to make red-border seen
         personsEnteredElem.focus();
@@ -114,13 +112,13 @@ function refreshAmountEntered(currentInvoice: Invoice) {
 }
 
 // 3.3 update amount display
-function updateAmountDisplay(currentInvoice: Invoice) {
-    const bill = (currentInvoice.bill < 0) ? 0.0 : invoice.bill;
-    const tip = bill * currentInvoice.tipRate / 100.0;
+function updateAmountDisplay(current: Invoice) {
+    const bill = (current.bill < 0) ? 0.0 : current.bill;
+    const tip = bill * current.tipRate / 100.0;
     const total = bill + tip;
 
     billAmountElem.innerText = bill.toFixed(2);
-    tipPercentageElem.innerText = currentInvoice.tipRate.toString();
+    tipPercentageElem.innerText = current.tipRate.toString();
     tipAmountElem.innerText = tip.toFixed(2);
     totalAmountElem.innerText = total.toFixed(2);
 }
