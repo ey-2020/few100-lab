@@ -28,7 +28,7 @@
                    id="bill-entered"
                    placeholder="0.00">
         </div>
-        <div class="btn-group mb-3 ml-3">
+        <div class="btn-group mb-0 ml-3">
             <div class="btn-group">
                 <button class="btn btn-secondary"
                         id="button-10-pct"
@@ -40,6 +40,9 @@
                         id="button-20-pct"
                         type="button">20%</button>
             </div>
+        </div>
+        <div class="mb-3 ml-3">
+            You are tipping: <span id="tip-label"></span>%
         </div>
         <div class="ml-3">
             <table class="table-bordered w-75">
@@ -56,6 +59,19 @@
                     <td class="pl-2">Total to be Paid: $<span id="total-amount"></span></td>
                 </tr>
             </table>
+        </div>
+        <div class="mt-3 ml-3">
+            Splitting among <span id="persons-label"></span> person(s);
+        </div>
+        <div class="mt-1 mb-1 w-25 ml-3">
+            <input type="text"
+                   class="form-control"
+                   id="persons-entered"
+                   placeholder="1">
+        </div>
+        <div id="each-paying"
+             class="mb-3 ml-3">
+            Each paying: $<span id="average-amount"></span>
         </div>
     </main>
 </body>

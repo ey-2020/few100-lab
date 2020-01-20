@@ -2,8 +2,8 @@ h1 {
     color:#223388;
 }
 .red-border {
-    border-color: red;
     border: 2px solid red;
-    background-color: rgb(139, 103, 103);
-    color: #44aacc;
+}
+.darkred-text {
+    color: rgb(196, 32, 32);
 }
